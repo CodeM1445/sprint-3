@@ -46,23 +46,112 @@
 
     // 👉 CHALLENGE 1 - Integers
     class Integers {
+      constructor(...intgs){
+        this.ints = intgs;
+      }
+      getAll(){
+        return this.ints
+      }
+      getEvens(){
+        return this.ints.filter(num => num % 2 === 0)
+      }
+      getNegatives(){
+        return this.ints.filter(num => num < 0)
+      }
+      getAllSquared(){
+        return this.ints.map(num => num ** 2)
+      }
+      pop(){
+        return this.ints.pop()
+      }
+      push(int){
+        this.ints.push(int)
+        return this.ints;
+      }
+      getEveryNth(n){
+        let result = [];
+        for(let i = 0; i < this.ints.length; i += n){
+          result.push(this.ints[i])
+        }
+        return result
+      }
+      getAllReversed(){
+        return this.ints.slice().reverse();
+      }
+
+
+    
       // 🧠 Constructor takes **any** number of arguments, which are integers
-      // 🧠 Instances have an `ints` property which is an array holding the integers above in the same order
+      //🧠 Instances have an `ints` property which is an array holding the integers above in the same order
       // 🧠 Implement a `getAll` method which returns the data held in the `ints` property
       // 🧠 Implement a `getEvens` method which returns an array with the integers that are even
       // 🧠 Implement a `getNegatives` method which returns an array with the integers that negative
       // 🧠 Implement a `getAllSquared` method which returns an array with the integers squared
       // 🧠 Implement a `pop` method which removes the last integer from `ints`  and returns it
       // 🧠 Implement a `push` method which takes an int and pushes it to the end of `ints`, and returns the updated `ints` property
-      // 🧠 Implement a `getEveryNth` method which takes an int `n` and returns an array with the ints at position 0, n, n + n, n + n + n, etc
+      // 🧠 Implement a `getEvery` method which takes an int `n` and returns an array with the ints at position 0, n, n + n, n + n + n, etc
       // 🧠 Implement a `getAllReversed` method which returns the ints in reverse order
       // ❗ WARNING: except for `getAllReversed`, methods must respect the order of the integers
       // ❗ WARNING: note that none of the methods actually mutate the `ints` property
 
+
     }
+    const newInteger = new Integers()
 
     // 👉 CHALLENGE 2 NerfGun
     class NerfGun {
+      constructor(projectiles){
+        this.projectiles = projectiles;
+        this.safetyOn = true;
+        this.fullyLoaded = true;
+      }
+      shoot(){
+        if(this.projectiles === 0 || this.safetyOn){
+          return `Click!`
+        }
+        else if(this.projectiles > 0 && !this.safetyOn){
+          this.projectiles--
+          return `Bang!`
+        }
+
+      }
+      reload(number){
+        
+        let result = []
+        result.push(number)
+        for(let key in result){
+          if(result[key] === 0 || result[key] < 0 || typeof(result[key]) !== "number"){
+            return `Error reloading!`
+          }
+          else{
+            this.projectiles += number
+            let capacity = 3;
+            console.log(capacity)
+
+            if(this.projectiles > capacity){
+              this.projectiles = capacity;
+              return `${this.projectiles} projectiles left!`
+            }
+            else{
+              return `${number} projectiles left!`
+            }
+            
+          }
+        }
+      }
+
+      toggleSafety(){
+        if(this.safetyOn){
+          this.safetyOn = false;
+          return `Safety disabled!`
+        }
+        else{
+          this.safetyOn = true;
+          return `Safety enabled!`
+        }
+      }
+
+
       // 🧠 Constructor takes one argument: the total number of projectiles supported by the instance
       // 🧠 New instances initialize fully loaded and with the safety on
       // 🧠 Instances have a `shoot` method that takes no arguments:
@@ -78,10 +167,27 @@
       // 🌟 HINT: instances need to keep track of their maximum capacity as well as their current capacity
 
     }
+    const newGun = new NerfGun()
+    
 
     // 👉 CHALLENGE 3 EBook
     class EBook {
-      // 🧠 Constructor takes two arguments:
+      constructor(text,charPerPage){
+        this.text = text;
+        this.charPerPage = charPerPage;
+        this.currentPage = 0;
+      }
+      next(){
+        const startChar = this.currentPage * this.charPerPage;
+        const nextToLastChar = startChar + this.charPerPage;
+        const result = this.text.slice(startChar,nextToLastChar)
+        if(result){
+          this.currentPage++
+          return result
+        }
+        return null
+      }
+      // 🧠 Constructor takesd two arguments:
       //      * First arg is a string with the whole text of the book
       //      * Second arg is the number of characters contained in a single page of the book
       // 🧠 Instances have a `next` method:
@@ -98,8 +204,39 @@
 
     }
 
+    const newBook = new EBook()
     // 👉 CHALLENGE 4 AntFarm
     class AntFarm {
+      constructor(...antNames) {
+    this.ants = antNames.map(name => ({ name, health: 100 }));
+  }
+
+  work() {
+    if (this.ants.length === 0) {
+      return "No ants here. Did you work them to death?";
+    }
+    let message = `${this.ants.length} ants starting work!`;
+
+this.ants = this.ants.map(ant => ({ ...ant, health: ant.health - 20 })).filter(ant => ant.health > 0);
+
+return message;
+   
+  }
+  feed(name){
+    const matchingAnts =  this.ants.filter(ant => ant.name === name)
+    if(matchingAnts.length > 0){
+      matchingAnts.forEach(ant => {
+        ant.health += 15
+      })
+      return `Yum!`
+    }
+    else{
+      return `${name} not found!`
+    }
+    
+  }
+        
+      
       // 🧠 Constructor takes **any** number of arguments, which are strings: the names of your ants
       // 🧠 Instances of AntFarm have an `ants` property holding an array of ants:
       //      * Each ant is an object with a `name` prop and a `health` prop that starts at 100
@@ -132,6 +269,8 @@
       //      and with the piece of mind of all tests passing, refactor to use map/filter
 
     }
+
+    const antFarm = new AntFarm()
 
     // 🧪 TESTS, do not make any changes below this line ===================
     // 🧪 TESTS, do not make any changes below this line ===================
